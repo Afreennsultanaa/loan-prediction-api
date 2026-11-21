@@ -1,0 +1,165 @@
+{
+  "model_name": "Stage 2: Payment Risk Analyzer (Full Payment Classifier)",
+  "stage": 2,
+  "model_type": "XGBClassifier",
+  "target": "full_payment",
+  "target_labels": {
+    "0": "High Risk / Delinquent",
+    "1": "Full Payment Success"
+  },
+  "feature_names": [
+    "loan_amnt",
+    "int_rate",
+    "annual_inc",
+    "dti",
+    "revol_util",
+    "mort_acc",
+    "dti_band",
+    "employment_duration",
+    "fico_score",
+    "term_months",
+    "purpose_group_Auto",
+    "purpose_group_Business",
+    "purpose_group_Credit Card",
+    "purpose_group_Debt Consolidation",
+    "purpose_group_Education",
+    "purpose_group_Home",
+    "purpose_group_Other",
+    "home_ownership_MORTGAGE",
+    "home_ownership_OTHER",
+    "home_ownership_OWN",
+    "home_ownership_RENT",
+    "sub_grade_num"
+  ],
+  "expected_input_fields": {
+    "loan_amnt": "Loan amount in USD (numeric)",
+    "term": "Term in months, e.g. '36 months' or integer 36/60",
+    "int_rate": "Interest rate percentage e.g. 11.99 or '11.99%'",
+    "sub_grade": "Lending subgrade e.g. 'A1' through 'G5'",
+    "emp_length": "Employment length e.g. '10+ years', '< 1 year', '5 years' or integer 0-10",
+    "home_ownership": "Home ownership status: 'RENT', 'OWN', 'MORTGAGE', 'OTHER'",
+    "annual_inc": "Annual income in USD (numeric)",
+    "purpose": "Loan purpose e.g. 'debt_consolidation', 'credit_card', 'home_improvement', etc.",
+    "dti": "Debt to income ratio e.g. 18.41 or '18.41%'",
+    "fico_score": "FICO credit score e.g. 700 (or fico_range_low and fico_range_high)",
+    "revol_util": "Revolving line utilization e.g. 52.3 or '52.3%'",
+    "mort_acc": "Number of mortgage accounts e.g. 1.0"
+  },
+  "medians": {
+    "loan_amnt": 12500.0,
+    "term_months": 36.0,
+    "int_rate": 11.99,
+    "annual_inc": 65000.0,
+    "dti": 18.41,
+    "revol_util": 52.3,
+    "mort_acc": 1.0,
+    "employment_duration": 6.0,
+    "fico_score": 687.0,
+    "sub_grade_num": 15
+  },
+  "dti_bins": [
+    -1000.0,
+    10.0,
+    20.0,
+    30.0,
+    40.0,
+    1000.0
+  ],
+  "mappings": {
+    "sub_grade_map": {
+      "A1": 1,
+      "A2": 2,
+      "A3": 3,
+      "A4": 4,
+      "A5": 5,
+      "B1": 6,
+      "B2": 7,
+      "B3": 8,
+      "B4": 9,
+      "B5": 10,
+      "C1": 11,
+      "C2": 12,
+      "C3": 13,
+      "C4": 14,
+      "C5": 15,
+      "D1": 16,
+      "D2": 17,
+      "D3": 18,
+      "D4": 19,
+      "D5": 20,
+      "E1": 21,
+      "E2": 22,
+      "E3": 23,
+      "E4": 24,
+      "E5": 25,
+      "F1": 26,
+      "F2": 27,
+      "F3": 28,
+      "F4": 29,
+      "F5": 30,
+      "G1": 31,
+      "G2": 32,
+      "G3": 33,
+      "G4": 34,
+      "G5": 35
+    },
+    "employment_duration_map": {
+      "< 1 year": 0,
+      "1 year": 1,
+      "2 years": 2,
+      "3 years": 3,
+      "4 years": 4,
+      "5 years": 5,
+      "6 years": 6,
+      "7 years": 7,
+      "8 years": 8,
+      "9 years": 9,
+      "10+ years": 10
+    },
+    "purpose_categories": [
+      "Auto",
+      "Business",
+      "Credit Card",
+      "Debt Consolidation",
+      "Education",
+      "Home",
+      "Other"
+    ],
+    "home_ownership_categories": [
+      "MORTGAGE",
+      "OTHER",
+      "OWN",
+      "RENT"
+    ]
+  },
+  "purpose_regex_rules": [
+    {
+      "pattern": "debt|consolidat",
+      "category": "Debt Consolidation"
+    },
+    {
+      "pattern": "credit card",
+      "category": "Credit Card"
+    },
+    {
+      "pattern": "home|house|property|mortgage",
+      "category": "Home"
+    },
+    {
+      "pattern": "car|auto|vehicle|motorcycle",
+      "category": "Auto"
+    },
+    {
+      "pattern": "business",
+      "category": "Business"
+    },
+    {
+      "pattern": "education|educational|school|student|college",
+      "category": "Education"
+    }
+  ],
+  "thresholds": {
+    "standard_threshold": 0.5,
+    "cost_optimized_default_cutoff": 0.17
+  }
+}
